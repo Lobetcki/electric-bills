@@ -13,11 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/billing")
-//TODO: Хорошо бы задокументировать АПИ :-(
 
 public class BillingController {
-
-  //TODO: Стоит сделать это свойство конфигурируемым через application.properties
 
   private final BillingService billingService;
 

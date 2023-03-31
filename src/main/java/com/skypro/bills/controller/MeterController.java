@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/meter")
-//TODO: Хорошо бы задокументировать АПИ :-(
 
 public class MeterController {
 

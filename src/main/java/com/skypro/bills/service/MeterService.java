@@ -40,7 +40,7 @@ public class MeterService {
     }
 
     public MeterDTO getMeter(String serialNumber) {
-        ElectricityMeter meter = meterRepository.findById(serialNumber).orElse(null); //.orElse(null);
+        ElectricityMeter meter = meterRepository.findById(serialNumber).orElse(null);
         checkingForNull(meter);
             return MeterDTO.fromMeterDTO(meter, MeterService.maxLastIndicator(meter));
     }
