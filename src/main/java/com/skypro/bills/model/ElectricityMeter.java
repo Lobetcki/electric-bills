@@ -1,9 +1,7 @@
 package com.skypro.bills.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -13,6 +11,10 @@ public class ElectricityMeter {
   @OneToMany(mappedBy = "electricityMeter", cascade = CascadeType.ALL)
   private List<Indication> indications;
   private double balance;
+
+  public double getBalance() {
+    return balance;
+  }
 
   public String getSerialNumber() {
     return serialNumber;
@@ -24,10 +26,6 @@ public class ElectricityMeter {
 
   public List<Indication> getIndications() {
     return indications;
-  }
-
-  public double getBalance() {
-    return balance;
   }
 
   public void setBalance(double balance) {

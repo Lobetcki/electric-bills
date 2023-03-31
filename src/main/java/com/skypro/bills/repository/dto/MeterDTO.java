@@ -27,7 +27,6 @@ public class MeterDTO {
   public ElectricityMeter toMeter() {
     ElectricityMeter meter = new ElectricityMeter();
     meter.setSerialNumber(this.getSerialNumber());
-
     return meter;
   }
 

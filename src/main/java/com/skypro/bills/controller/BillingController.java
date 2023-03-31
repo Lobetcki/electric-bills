@@ -34,7 +34,7 @@ public class BillingController {
 
   @GetMapping("/{serial}")
   public ResponseEntity<?> pay(@PathVariable("serial") String serial) {
-    BalanceDTO balanceDTO = billingService.pay(serial);
+    BalanceDTO balanceDTO = billingService.pay(serial, null);
     return ResponseEntity.ok(balanceDTO);
   }
 }

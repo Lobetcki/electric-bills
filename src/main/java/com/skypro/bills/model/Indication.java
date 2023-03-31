@@ -1,9 +1,7 @@
 package com.skypro.bills.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
 import java.time.Instant;
 
 @Entity
@@ -34,6 +32,10 @@ public class Indication {
 
   public void setSendingDate(Instant sendingDate) {
     this.sendingDate = sendingDate;
+  }
+
+  public ElectricityMeter getElectricityMeter() {
+    return electricityMeter;
   }
 
   public void setElectricityMeter(ElectricityMeter electricityMeter) {

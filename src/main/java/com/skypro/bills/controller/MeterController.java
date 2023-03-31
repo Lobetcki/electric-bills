@@ -30,24 +30,13 @@ public class MeterController {
 
   @GetMapping("/{serial}")
   public ResponseEntity<MeterDTO> getMeter(@PathVariable("serial") String serialNumber) {
-    MeterDTO meterDTO = meterService.getMeter(serialNumber);
-    return ResponseEntity.ok(meterDTO);
+    return ResponseEntity.ok(meterService.getMeter(serialNumber));
   }
 
   @PostMapping("/{serial}/{indication}")
 
   public ResponseEntity<MeterDTO> newIndication(@PathVariable("serial") String serial,
       @PathVariable("indication") int indication) {
-    MeterDTO meterDTO = meterService.newIndication(serial, indication);
-
-//    if (indication < 0){
-//      return ResponseEntity.badRequest().body("Показания не могут быть отрицательными");
-//    }
-//
-//    if (lastIndication.getIndication() > indication) {
-//      return ResponseEntity.badRequest().body("Показания счетчика меньше предыдущих показаний");
-//    } else {
-
-      return ResponseEntity.ok(meterDTO);
+      return ResponseEntity.ok(meterService.newIndication(serial, indication));
     }
 }

@@ -1,12 +1,12 @@
 package com.skypro.bills.repository.dto;
 
 import com.skypro.bills.model.ElectricityMeter;
-import jakarta.persistence.Entity;
+import com.skypro.bills.model.Indication;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 import java.time.Instant;
+import java.util.UUID;
 
 
 public class IndicationDTO {
@@ -16,6 +16,32 @@ public class IndicationDTO {
   private Instant sendingDate;
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   private ElectricityMeter electricityMeter;
+
+  public static IndicationDTO fromMeterDTO(Indication indication){
+    IndicationDTO indicationDTO = new IndicationDTO();
+    indicationDTO.setIndication(indication.getIndication());
+    indicationDTO.setId(UUID.randomUUID().toString());
+    indicationDTO.setSendingDate(Instant.now());
+    indicationDTO.setElectricityMeter(indication.getElectricityMeter());
+    return indicationDTO;
+  }
+
+  public Indication toMeter() {
+    Indication indication = new Indication();
+    indication.setIndication(this.getIndication());
+    indication.setId(this.getId());
+    indication.setSendingDate(this.getSendingDate());
+    indication.setElectricityMeter(this.getElectricityMeter());
+    return indication;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public ElectricityMeter getElectricityMeter() {
+    return electricityMeter;
+  }
 
   public void setId(String id) {
     this.id = id;
