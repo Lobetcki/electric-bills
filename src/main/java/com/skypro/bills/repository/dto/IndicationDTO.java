@@ -1,15 +1,16 @@
-package com.skypro.bills.model;
+package com.skypro.bills.repository.dto;
 
+import com.skypro.bills.model.ElectricityMeter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+
 import java.time.Instant;
 
-@Entity
-public class Indication {
 
-  @Id
+public class IndicationDTO {
+
   private String id;
   private int indication;
   private Instant sendingDate;

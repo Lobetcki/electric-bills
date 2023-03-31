@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 public class ElectricityMeter {
@@ -26,10 +24,6 @@ public class ElectricityMeter {
 
   public List<Indication> getIndications() {
     return indications;
-  }
-
-  public void setIndications(List<Indication> indications) {
-    this.indications = indications;
   }
 
   public double getBalance() {

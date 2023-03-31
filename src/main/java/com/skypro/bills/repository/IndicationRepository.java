@@ -1,9 +1,10 @@
 package com.skypro.bills.repository;
 
 import com.skypro.bills.model.ElectricityMeter;
+import com.skypro.bills.model.Indication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MeterRepository extends JpaRepository<ElectricityMeter, String> {
+public interface IndicationRepository extends JpaRepository<Indication, String> {
 }
