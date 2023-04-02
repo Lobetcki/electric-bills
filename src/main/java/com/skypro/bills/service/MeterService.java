@@ -1,50 +1,68 @@
 package com.skypro.bills.service;
 
+import com.skypro.bills.exception.ElectricityMeterNotFoundExeption;
+import com.skypro.bills.exception.InvalidParametersExeption;
 import com.skypro.bills.model.ElectricityMeter;
 import com.skypro.bills.model.Indication;
+import com.skypro.bills.repository.IndicationRepository;
 import com.skypro.bills.repository.MeterRepository;
+import com.skypro.bills.repository.dto.IndicationDTO;
 import com.skypro.bills.repository.dto.MeterDTO;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Comparator;
 
 @Service
 public class MeterService {
-    MeterRepository meterRepository;
+    private final MeterRepository meterRepository;
+    private final IndicationRepository indicationRepository;
 
-    public MeterService(MeterRepository meterRepository) {
+    public MeterService(MeterRepository meterRepository, IndicationRepository indicationRepository) {
         this.meterRepository = meterRepository;
+        this.indicationRepository = indicationRepository;
     }
 
     public MeterDTO createMeter(MeterDTO meterDTO) {
-        MeterDTO meterDTO1 = new MeterDTO();
-
-        ElectricityMeter meter = new ElectricityMeter();
-
-        meter.setSerialNumber(meterDTO.getSerialNumber());
-
-        meter = meterRepository.save(meter);
-
-        meterDTO1.setSerialNumber(meter.getSerialNumber());
-
-        return meterDTO1;
+        return MeterDTO.fromMeterDTO(meterRepository.save(meterDTO.toMeter()));
     }
 
-    public MeterDTO getMeter(@PathVariable("serial") String serialNumber) {
+    public static void checkingForNull(ElectricityMeter meter) {
+         if (meter == null) {
+            throw new ElectricityMeterNotFoundExeption("Такой не найден");
+        }
+    }
 
-        MeterDTO meterDTO = new MeterDTO();
+    private static Indication maxLastIndicator(ElectricityMeter meter) {
+        if (meter == null) throw new ElectricityMeterNotFoundExeption("Такой не найден");
+        return meter.getIndications().stream()
+                .max(Comparator.comparing(Indication::getSendingDate))
+                .orElse(new Indication());
+    }
 
-        meterDTO.setSerialNumber(meterRepository.findById(serialNumber).get().getSerialNumber());
+    public MeterDTO getMeter(String serialNumber) {
+        ElectricityMeter meter = meterRepository.findById(serialNumber).orElse(null);
+        checkingForNull(meter);
+            return MeterDTO.fromMeterDTO(meter, MeterService.maxLastIndicator(meter));
+    }
 
-        meterDTO.setLastIndication(
-
-                meterRepository.findById(serialNumber).get().getIndications().stream()
-
-                        .max(Comparator.comparing(Indication::getSendingDate))
-
-                        .orElse(new Indication()).getIndication());
-
-        return meterDTO;
+    public MeterDTO newIndication(String serialNumber, int intIndication) {
+        ElectricityMeter meter = meterRepository.findById(serialNumber).orElse(null);
+        checkingForNull(meter);
+        if (intIndication < 0){
+           throw new InvalidParametersExeption("Показания не могут быть отрицательными");
+        }
+        if (MeterService.maxLastIndicator(meter).getIndication() > intIndication) {
+            throw new InvalidParametersExeption("Показания счетчика меньше предыдущих показаний");
+        } else {
+            Indication indication = new Indication();
+            indication.setIndication(intIndication);
+            indication.setElectricityMeter(meter);
+            IndicationDTO indicationDTO = IndicationDTO.fromMeterDTO(indication);
+            indication = indicationDTO.toMeter();
+            indicationRepository.save(indication);
+            meter.getIndications().add(indication);
+            meterRepository.save(meter);
+            return MeterDTO.fromMeterDTO(meter, indication);
+        }
     }
 }

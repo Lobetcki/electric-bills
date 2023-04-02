@@ -1,16 +1,19 @@
 package com.skypro.bills.repository.dto;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class BalanceDTO {
 
   private String serialNumber;
   private double currentBalance;
 
-  public BalanceDTO() {
-  }
 
-  public BalanceDTO(String serialNumber, double currentBalance) {
-    this.serialNumber = serialNumber;
-    this.currentBalance = currentBalance;
+  public static BalanceDTO fromMeterDTO(String serialNumber, double balance){
+    BalanceDTO balanceDTO = new BalanceDTO();
+    balanceDTO.setSerialNumber(serialNumber);
+    balanceDTO.setCurrentBalance(balance);
+    return balanceDTO;
   }
 
   public String getSerialNumber() {
